@@ -1,97 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-struct binaryTreeNode
-{
-  char data[100];
-  struct node *left, *right;
-};
-
-struct binaryTreeNode* create()
-{
-    char newData[100];
-    struct binaryTreeNode *newNode= (struct binaryTreeNode*)malloc(sizeof(struct binaryTreeNode));
-    scanf("%s",&newNode->data);
-    newNode->left=NULL;
-    newNode->right=NULL;
-    return newNode;
-}
-
-// Function to find the path from the root node to a leaf node
-  char** findPathFromRootToLeaf(struct binaryTreeNode* root, struct binaryTreeNode* leafNode, char **path, int pathLength) {
-    // Base case: if the current node is NULL, return 0
-    if (root == NULL) {
-        return 0;
-    }
-
-    // Add the current node to the path
-    for(int i=0;root->data[i]!='\0';i++)
-    {
-     path[pathLength++][i] = root->data[i];     
-    }
-    
-    // Base case: if the current node is the leaf node, print the path
-    if (root == leafNode) {
-        
-        return path;
-    }
-
-    // Recursively search in the left and right subtrees
-    int foundPath = findPathFromRootToLeaf(root->left, leafNode, path, pathLength) ||
-                    findPathFromRootToLeaf(root->right, leafNode, path, pathLength);
-
-}
-
-
-
-struct binaryTreeNode *root = NULL;
 int main()
 {
-    while(1)
-    {
-        // City Name
-        printf("Enter the City Value: ");
-        root= create();
-        // Suburb Name
-        printf("Enter the 1st Suburb Name:");
-        root->left= create();
-        printf("Enter the 2nd Suburb Name:");
-        root->right= create();
+    // Taking all the Data Input
+       char similarArray[20][100];
+       int similarArrayIndex=0;
+       char inputArray[20][100];
+        for(int i=0;i<15;i++)
+        {   if(i==0)
+            {
+                printf("Enter the City Value: "); 
+            }
+            if(i>0 && i<=2)
+            {
+                printf("Enter the Suburb Value: "); 
+            }
+            if(i>2 && i<=6)
+            {
+                printf("Enter the Town Value: "); 
+            }
+            if(i>6)
+            {
+                printf("Enter the Corporation Value: "); 
+            }
+            scanf("%s",inputArray[i]);
+        }
         
-        // Town Name
-        printf("Enter the 1st Town Name:");
-        root->left->left= create();
-        printf("Enter the 2nd Town Name:");
-        root->left->right= create();
-        
-        printf("Enter the 3rd Town Name:");
-        root->right->left= create();
-        printf("Enter the 4th Town Name:");
-        root->right->right= create();
-        
-        // Corporation Name
-        printf("Enter the 1st Corporation Name:");
-        root->left->left->left= create();
-        printf("Enter the 2nd Corporation Name:");
-        root->left->left->right= create();
-        
-        printf("Enter the 3rd Corporation Name:");
-        root->left->right->left= create();
-        printf("Enter the 4th Corporation Name:");
-        root->left->right->right= create();
-        
-        printf("Enter the 5th Corporation Name:");
-        root->right->left->left= create();
-        printf("Enter the 6th Corporation Name:");
-        root->right->left->right= create();
-        
-        printf("Enter the 7th Corporation Name:");
-        root->right->right->left= create();
-        printf("Enter the 8th Corporation Name:");
-        root->right->right->right= create();
-        break;
-    }
-
+    // Taking 2 Corporation Names as Input
     char firstCorporationName[100];
     char secondCorporationName[100];
     printf("Enter the 1st Corporation Name to be Search: ");
@@ -99,15 +34,95 @@ int main()
     printf("Enter the 2nd Corporation Name to be Search: ");
     scanf("%s",&secondCorporationName);
     
-    
-    
-    // Finding the path of Both the Leaf Nodes from the Root to the Leaf
-    char **path=(char**)malloc(4 * sizeof(char));
-    for (int i = 0; i < 4; i++) {
-        path[i] = (char*)malloc(100 * sizeof(char));
+    int firstCorporationIndex=0;
+    int secondCorporationIndex=0;
+
+    // Searching for that Index of the Corporation Name in the inputArray
+    for(int j=0;j<15;j++)
+    {
+        int match=1;
+     for(int k=0;k<100;k++)
+     {
+         
+         if(inputArray[j][k] != firstCorporationName[k])
+         {
+             match=0;
+             break;
+         }
+         if(firstCorporationName[k]=='\0')
+         {
+             break;
+         }
+     }
+     if(match)
+     {
+         firstCorporationIndex=j;
+         break;
+     }
     }
-    int pathLength = 0;
-    findPathFromRootToLeaf(root, leafNode, path, pathLength);
-            
+    
+    for(int j=0;j<15;j++)
+    {
+        int match=1;
+     for(int k=0;k<100;k++)
+     {
+         
+         if(inputArray[j][k] != secondCorporationName[k])
+         {
+             match=0;
+             break;
+         }
+         if(secondCorporationName[k]=='\0')
+         {
+             break;
+         }
+     }
+     if(match)
+     {
+         secondCorporationIndex=j;
+         break;
+     }
+    }
+    
+    // Finding Similar Parent Of Both the Corporation
+    int firstCorporationImmediateParentIndex= (firstCorporationIndex-1)/2;
+    int secondCorporationImmediateParentIndex= (secondCorporationIndex-1)/2;
+    for(int i=0;i<3;i++)
+    {
+        int match=1;
+        for(int j=0;j<100;j++)
+     {
+         if(inputArray[firstCorporationImmediateParentIndex][j] != inputArray[secondCorporationImmediateParentIndex][j])
+         {
+             match=0;
+             break;
+         }
+         if(inputArray[firstCorporationImmediateParentIndex][j]=='\0'|| inputArray[secondCorporationImmediateParentIndex][j]=='\0')
+         {
+             break;
+         }
+     }
+     if(match)
+     {
+         for(int k=0;k<100;k++)
+         {
+             similarArray[similarArrayIndex][k]=inputArray[firstCorporationImmediateParentIndex][k];
+             if(inputArray[firstCorporationImmediateParentIndex][k]=='\0')
+             {
+                 break;
+             }
+         }
+         similarArrayIndex++;
+     }
+    firstCorporationImmediateParentIndex= (firstCorporationImmediateParentIndex-1)/2;
+    secondCorporationImmediateParentIndex= (secondCorporationImmediateParentIndex-1)/2;
+    }
+
+    // Printing the Similar Parent Of Both the Corporation
+    printf("\n");
+    for(int i=0; i<similarArrayIndex;i++)
+    {
+        printf("%s,  ",similarArray[i]);
+    }
     return 0;
 }
